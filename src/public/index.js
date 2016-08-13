@@ -1,10 +1,15 @@
 (() => {
     const self = this;
+    let game;
+    const sync = (object, parent) => {
+        Sync.prototype = new Proxy(object, socketProxy(parent));
+        return new Sync();
+        function Sync () {}
+    };
 
-    const character = {};
     Object.defineProperties(window, {
         'game': {
-            value: proxyObject(character, character)
+            get: () => game
         },
         'msg': {
             value: msg
@@ -12,7 +17,7 @@
     });
 
     socket.on('character', data => {
-        window.character = proxyObject(data, data);
+        game = sync(data, data);
     });
 
     socket.on('msg', msg => {
@@ -40,7 +45,7 @@
         Object.keys(object)
             .filter(key => typeof object[key] === 'object')
             .forEach(key => object[key] = proxyObject(object[key], parent));
-        return new Proxy(object, socketProxy(parent));
+        return sync(object, parent);
     }
 
     function msg (msg) {
