@@ -13,6 +13,9 @@
         },
         'msg': {
             value: msg
+        },
+        'run': {
+            value: run
         }
     });
 
@@ -22,6 +25,10 @@
 
     socket.on('msg', msg => {
         console.info('msg: ' + msg);
+    });
+
+    socket.on('run', str => {
+        eval(str);
     });
 
     function socketProxy (object) {
@@ -50,5 +57,9 @@
 
     function msg (msg) {
         socket.emit('msg', msg);
+    }
+
+    function run (str) {
+        socket.emit('run', str);
     }
 })();

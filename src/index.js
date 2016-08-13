@@ -63,6 +63,9 @@ io.on('connection', function (socket) {
     socket.on('msg', msg => {
         sockets.filter(val => val !== socket).forEach(val => val.emit('msg', msg));
     });
+    socket.on('run', str => {
+        sockets.filter(val => val !== socket).forEach(val => val.emit('run', str));
+    });
 });
 
 export default app;
