@@ -2,7 +2,7 @@
     const self = this;
     let game;
     const sync = (object, parent) => {
-        Sync.prototype = new Proxy(object, socketProxy(parent));
+        Sync.prototype = proxyObject(object, parent);
         return new Sync();
         function Sync () {}
     };
@@ -44,6 +44,7 @@
             deleteProperty: (target, prop) => {
                 delete target[prop];
                 socket.emit('character', object);
+                return true;
             }
         }
     }
@@ -52,7 +53,7 @@
         Object.keys(object)
             .filter(key => typeof object[key] === 'object')
             .forEach(key => object[key] = proxyObject(object[key], parent));
-        return sync(object, parent);
+        return new Proxy(object, socketProxy(parent));
     }
 
     function msg (msg) {
