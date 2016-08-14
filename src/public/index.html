@@ -2,7 +2,7 @@
 <head>
     <script src="node_modules/socket.io-client/socket.io.js"></script>
     <script>
-        var socket = io('http://localhost:8080');
+        var socket = io("http://" + window.location.hostname);
     </script>
     <script src="index.js" type="text/javascript"></script>
 </head>
